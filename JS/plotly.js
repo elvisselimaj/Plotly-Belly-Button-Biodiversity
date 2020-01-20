@@ -1,4 +1,4 @@
-/Part 1 Import the Data
+//Part 1 Import the Data
 var drawChart = function(x_data, y_data, hoverText, metadata) {
 
 
