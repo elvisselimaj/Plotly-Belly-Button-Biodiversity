@@ -1,6 +1,6 @@
 // Belly Button Biodiversity by Elvis Selimaj, GWU bootcamp 
 
-// Anonymous function to pull names from json file and add them in the filter
+// Function to pull names from json file and add them in the filter
 
 //global variable
 
