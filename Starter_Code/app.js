@@ -1,89 +1,107 @@
-d3.json("samples.json").then(function(data) {
-  // Get names from the json
-  var sampleNames = data.names;
-  // console.log(sampleNames);
-  // Append each name in the HTML under "Test Subject ID"
-  sampleNames.forEach(function(name){
-      newOpt = d3.select("#selDataset").append("option").text(name);
-  })
-})
-// Instantiate contructor functions with new sample name request
-function optionChanged(newSample) {
-  chartsConstructor(newSample);
-  metadataConstructor(newSample);
-}
-//Construct Demographic Info Function
-function metadataConstructor(val) {
-  d3.json("samples.json").then(function(data) {
-              
-      var index = data.names.indexOf(val);
-      var demographics = data.metadata[index];
-      // Select HTML section to work with
-      var sample_metadata = d3.select("#sample-metadata");
-      //Clear existing metadata first
-      sample_metadata.html("");
-      // Then,  for each attribute in the object selected
-      // print and append under "Demographic Info"
-      Object.entries(demographics).forEach(function ([key, value]) {
-          var row = sample_metadata.append("p");
-          row.text(`${key}: ${value}`);
+// Belly Button Biodiversity by Elvis Selimaj, GWU bootcamp 
+
+// Anonymous function to pull names from json file and add them in the filter
+
+//global variable
+
+
+var drawChart = function(x_data, y_data, hoverText, metadata) {
+
+
+  var metadata_panel = d3.select("#sample-metadata");
+  metadata_panel.html("");
+  Object.entries(metadata).forEach(([key, value]) => {
+      metadata_panel.append("p").text(`${key}: ${value}`);
+  });
+
+  var trace = {
+      x: x_data,
+      y: y_data,
+      text: hoverText,
+      type: 'bar',
+      orientation: 'h'
+  };
+
+  var data = [trace];
+
+  Plotly.newPlot('bar', data);
+
+  var trace2 = {
+      x: x_data,
+      y: y_data,
+      text: hoverText,
+      mode: 'markers',
+      marker: {
+          size: y_data,
+          color: x_data
+      }
+  };
+
+  var data2 = [trace2];
+
+  Plotly.newPlot('bubble', data2);
+
+
+};
+
+var populateDropdown = function(names) {
+
+  var selectTag = d3.select("#selDataset");
+  var options = selectTag.selectAll('option').data(names);
+
+  options.enter()
+      .append('option')
+      .attr('value', function(d) {
+          return d;
       })
-  })
-}
-// Construct Charts Function
-function chartsConstructor(x) {
-  d3.json("samples.json").then(function(data) {
-      var index = data.names.indexOf(x);
-      console.log(data.samples[index].sample_values);
-      
-      // Data for the Charts
-      var otu_id = data.samples[index].otu_ids;
-      var topOtu = otu_id.slice(0,10);
-      console.log(topOtu);
-      var values = data.samples[index].sample_values;
-      var topValues = values.slice(0,10);
-      console.log(topValues);
-      var labels = data.samples[index].otu_labels;
-       // #1: Bubble Chart    
-      var trace1 = {
-          x: otu_id,
-          y: values,
-          text: labels,
-          mode: 'markers',
-          marker: {
-          color: otu_id,
-          size: values
-          } 
-      };
-      
-      var data = [trace1];
-      var layout = {
-          xaxis: { title: "OTU ID"},
-      };
+      .text(function(d) {
+          return d;
+      });
+
+};
+
+var optionChanged = function(newValue) {
+
+  d3.json("data/samples.json").then(function(data) {
+
+  sample_new = data["samples"].filter(function(sample) {
+
+      return sample.id == newValue;
+
+  });
   
-      Plotly.newPlot("bubble", data, layout);
-      // #2 Bar Chart
-      var trace2 = {
-          type: 'bar',
-          x: topValues.reverse(),
-          y: topOtu.reverse().map(x => `OTU ${x}`),
-          orientation: 'h'
-      };
-      
-      var data2 = [trace2];
+  metadata_new = data["metadata"].filter(function(metadata) {
+
+      return metadata.id == newValue;
+
+  });
   
-      var layout2 = {
-          title: {
-              text: "Bellybutton Biodiversity: Top 10 OTUS per person (sample)",
-              y: .85
-          },
-          xaxis: {
-              title: "Number of colonies per each OTU"
-          },
-          yaxis: {
-              title: "OTU id number"
-          }
-      };
-      Plotly.newPlot("bar", data2, layout2)
-  })
-}
+  
+  x_data = sample_new[0]["otu_ids"];
+  y_data = sample_new[0]["sample_values"];
+  hoverText = sample_new[0]["otu_labels"];
+  
+  console.log(x_data);
+  console.log(y_data);
+  console.log(hoverText);
+  
+  drawChart(x_data, y_data, hoverText, metadata_new[0]);
+  });
+};
+
+d3.json("data/samples.json").then(function(data) {
+
+  //Populate dropdown with names
+  populateDropdown(data["names"]);
+
+  //Populate the page with the first value
+  x_data = data["samples"][0]["otu_ids"];
+  y_data = data["samples"][0]["sample_values"];
+  hoverText = data["samples"][0]["otu_labels"];
+  metadata = data["metadata"][0];
+
+  //Draw the chart on load
+  drawChart(x_data, y_data, hoverText, metadata);
+
+
+});
