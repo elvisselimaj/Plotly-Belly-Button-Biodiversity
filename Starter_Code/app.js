@@ -1,4 +1,9 @@
+// Belly Button Biodiversity by Elvis Selimaj, GWU bootcamp 
+
+// Anonymous function to pull names from json file and add them in the filter
+
 //global variable
+
 var data;
 
 //init function to fill in the select option
@@ -20,6 +25,7 @@ function init() {
     });
   });
 }
+
 //start filling the data inside the select option
 init();
 
@@ -45,10 +51,7 @@ function demographicFunc(valueSelect) {
 
   var out_label = filterValue2.map(v => v.otu_labels);
   var names = treatBacName(out_label[0]).slice(0, 10);
-  // console.log(ouid);
-  // console.log(valueX);
-  // console.log(out_label);
-  // console.log(names);
+  
 
   // Create the Trace
   var trace = {
