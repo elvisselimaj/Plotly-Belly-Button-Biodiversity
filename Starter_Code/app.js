@@ -104,6 +104,4 @@ d3.json("data/samples.json").then(function(data) {
   drawChart(x_data, y_data, hoverText, metadata);
 
 
-})
-
 }
