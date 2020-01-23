@@ -1,8 +1,8 @@
-// Belly Button Biodiversity by Elvis Selimaj, GWU bootcamp 
+// Belly Button Biodiversity by Elvis Selimaj, GWU BootCamp 
 
 // Function to pull names from json file and add them in the filter
 
-//global variable
+
 
 
 var drawChart = function(x_data, y_data, hoverText, metadata) {
