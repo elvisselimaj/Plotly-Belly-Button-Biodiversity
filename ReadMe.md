@@ -1,3 +1,9 @@
+![bay](elvis-images/gauge.png)
+
+![bay1](elvis-images/pie_chart.png)
+
+![bay1]elvis-images/dashboard_part1.png
+
 Belly_Button_Diversity
 
 Plot.ly Homework - Belly Button Biodiversity
