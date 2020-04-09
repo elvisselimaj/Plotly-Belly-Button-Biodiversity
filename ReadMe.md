@@ -2,7 +2,7 @@
 
 ![bay1](elvis-images/pie_chart.png)
 
-![bay2]elvis-images/dashboard_part1.png
+![bay2](elvis-images/dashboard_part1.png)
 
 Belly_Button_Diversity
 
